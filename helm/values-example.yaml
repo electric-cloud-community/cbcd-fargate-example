@@ -1,0 +1,32 @@
+database:
+  dbType: mysql
+  dbName: cbcd
+  dbUser: admin
+  dbPassword: supersecretpassword
+  externalEndpoint: 
+  dbPort: 3306
+
+# Set all storageclasses to use EFS
+storage:
+  volumes:
+    repositoryStorage:
+      storageClass: efs-sc
+    serverPlugins:
+      accessMode: ReadWriteMany
+      storageClass: efs-sc
+    agentWorkspace:
+      storageClass: efs-sc
+
+# Zookeeper has an issue on fargate where it can't connect the quorum
+# Either disable zookeeper by setting clusteredMode to false, or use a single replicaCount
+# zookeeper:
+#   enabled: true
+#   replicaCount: 1
+clusteredMode: false
+
+# Disable nginx ingress as we will use ALB
+nginx-ingress:
+  enabled: false
+
+flowCredentials:
+  adminPassword: changeme
