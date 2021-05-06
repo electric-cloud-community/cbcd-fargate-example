@@ -20,9 +20,11 @@ Below is a set of example instructions that show setting up CloudBees CD on Farg
 
 There are a couple of known issues at the moment:
 
-- DevOps Insight uses elasticsearch, and this currently requires privileged execution.
-- Zookeeper has an issue where it is unable to form a quorum.
+- DevOps Insight uses elasticsearch, and this currently requires privileged execution.  This is because of the 'max virtual memory areas vm.max_map_count' setting.  Privileged execution is required to execute 'sysctl -w vm.max_map_count=262144' which changes the setting for the host.  Without doing this elasticsearch fails to start with 'max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144] on docker host' error.  Use of sysctl is currently not supported on fargate (https://github.com/aws/containers-roadmap/issues/460).
+- Zookeeper has an issue where it is unable to form a quorum.  There is a connection refused error when the nodes attempt to connect to each other.
 
+The first issue means this example currently does not include a working DevOps Insight component (no reporting and dashboards)
+.
 Due to the second issue, this example is for a non-clustered set up of the CD-Server component of CloudBees CD.
 
 ## Setup EKS cluster ##
